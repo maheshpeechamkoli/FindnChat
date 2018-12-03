@@ -19,10 +19,10 @@ namespace FindnChitChat.Controllers
             _context = context;
             // if (_context.Values.Count() == 1)
             // {
-                // // Create a new TodoItem if collection is empty,
-                // // which means you can't delete all TodoItems.
-                // _context.Values.Add(new Value { Name = "Item2" });
-                // _context.SaveChanges();
+            //     // Create a new TodoItem if collection is empty,
+            //     // which means you can't delete all TodoItems.
+            //     _context.Values.Add(new Value { Name = "Value 2" });
+            //     _context.SaveChanges();
             // }
         }
 
