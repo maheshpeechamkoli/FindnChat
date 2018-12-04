@@ -1,9 +1,8 @@
-
 using System.ComponentModel.DataAnnotations;
 
 namespace FindnChitChat.Dto
 {
-    public class UserForRegisterDto
+    public class UserForLoginDto
     {
         [Required]
         public string UserName { get; set; }
