@@ -19,7 +19,7 @@ namespace FindnChitChat.Controllers
         [HttpPost("register")]
         public async Task<IActionResult> Register(UserForRegisterDto userDto)
         {
-            //validate user
+            //validate 
 
             userDto.UserName = userDto.UserName.ToLower();
 
