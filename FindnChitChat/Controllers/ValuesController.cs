@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using FindnChitChat.Data;
 using FindnChitChat.Model;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -11,6 +12,7 @@ namespace FindnChitChat.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize]
     public class ValuesController : ControllerBase
     {
         private readonly DataContext _context;
