@@ -8,7 +8,7 @@ import { AuthService } from '../_services/auth.service';
 })
 export class NavComponent implements OnInit {
   model: any = {};
-
+  username: any;
   constructor(private authService: AuthService) { }
 
   ngOnInit() {
@@ -22,4 +22,13 @@ export class NavComponent implements OnInit {
     });
   }
 
+  loggedIn() {
+    const token = localStorage.getItem('token');
+    this.username = localStorage.getItem('username');
+    return !!token;
+  }
+
+  logout() {
+    localStorage.removeItem('token');
+  }
 }

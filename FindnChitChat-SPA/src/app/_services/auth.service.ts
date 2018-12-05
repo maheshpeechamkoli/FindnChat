@@ -16,6 +16,7 @@ login(model: any) {
       const user = response;
       if (user) {
         localStorage.setItem('token', user.token);
+        localStorage.setItem('username', model.username);
       }
     })
   );
