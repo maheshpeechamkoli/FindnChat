@@ -46,6 +46,7 @@ namespace FindnChitChat.Controllers
         [HttpPost("login")]
         public async Task<IActionResult> Login(UserForLoginDto userDto)
         {
+            throw new Exception("sfdf");
             var userFromRepo = await _repo.Login(userDto.UserName.ToLower(), userDto.Password);
 
             if(userFromRepo == null)
