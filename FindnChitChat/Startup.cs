@@ -41,6 +41,7 @@ namespace FindnChitChat
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
             services.AddCors();
             services.AddScoped<IAuthRepository, AuthRepository>();
+            //Validating JWT Token
             services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
             .AddJwtBearer(options => {
                     options.TokenValidationParameters = new TokenValidationParameters
@@ -65,6 +66,7 @@ namespace FindnChitChat
             else
             {
                 //app.UseHsts();
+                //Exception Handling - npm install @auth0/angular-jwt
                 app.UseExceptionHandler(builder => {
                     builder.Run(async context => {
                         context.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
@@ -79,8 +81,8 @@ namespace FindnChitChat
             }
 
             //app.UseHttpsRedirection();
-            app.UseCors(x=>x.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader());
-            app.UseAuthentication();
+            app.UseCors(x=>x.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader()); //cros orgin
+            app.UseAuthentication(); 
             app.UseMvc();
         }
     }
