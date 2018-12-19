@@ -4,6 +4,7 @@ using System.Linq;
 using System.Net;
 using System.Text;
 using System.Threading.Tasks;
+using AutoMapper;
 using FindnChitChat.Data;
 using FindnChitChat.Helper;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -38,8 +39,13 @@ namespace FindnChitChat
 
             var connection = "Data Source=FindnChat.db";
             services.AddDbContext<DataContext>(options => options.UseSqlite(connection));
-            services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
+            services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1)
+                    .AddJsonOptions(opt => {
+                        opt.SerializerSettings.ReferenceLoopHandling = 
+                            Newtonsoft.Json.ReferenceLoopHandling.Ignore;
+                    });
             services.AddCors();
+            services.AddAutoMapper();
             services.AddTransient<Seed>();
             services.AddScoped<IAuthRepository, AuthRepository>();
             services.AddScoped<IFindingRepository, FindingRepository>();
@@ -69,7 +75,8 @@ namespace FindnChitChat
             else
             {
                 //app.UseHsts();
-                //Exception Handling - npm install @auth0/angular-jwt
+
+                ///Exception Handling - npm install @auth0/angular-jwt
                 app.UseExceptionHandler(builder => {
                     builder.Run(async context => {
                         context.Response.StatusCode = (int)HttpStatusCode.InternalServerError;

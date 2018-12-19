@@ -9,8 +9,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace FindnChitChat.Migrations
 {
     [DbContext(typeof(DataContext))]
-    [Migration("20181213115755_ExtendedUserClass")]
-    partial class ExtendedUserClass
+    [Migration("20181219104607_Initial Migrations")]
+    partial class InitialMigrations
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -29,9 +29,9 @@ namespace FindnChitChat.Migrations
 
                     b.Property<bool>("IsMain");
 
-                    b.Property<int>("UserId");
+                    b.Property<string>("Url");
 
-                    b.Property<string>("Utl");
+                    b.Property<int>("UserId");
 
                     b.HasKey("Id");
 
