@@ -9,7 +9,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace FindnChitChat.Migrations
 {
     [DbContext(typeof(DataContext))]
-    [Migration("20181219104607_Initial Migrations")]
+    [Migration("20181221111759_Initial Migrations")]
     partial class InitialMigrations
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -55,9 +55,9 @@ namespace FindnChitChat.Migrations
 
                     b.Property<string>("Gender");
 
-                    b.Property<string>("Indroduction");
-
                     b.Property<string>("Interests");
+
+                    b.Property<string>("Introduction");
 
                     b.Property<string>("KnownAs");
 
