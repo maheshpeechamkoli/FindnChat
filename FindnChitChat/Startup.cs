@@ -45,6 +45,7 @@ namespace FindnChitChat
                             Newtonsoft.Json.ReferenceLoopHandling.Ignore;
                     });
             services.AddCors();
+            services.Configure<CloudinarySettings>(Configuration.GetSection("CloudinarySettings"));
             services.AddAutoMapper();
             services.AddTransient<Seed>();
             services.AddScoped<IAuthRepository, AuthRepository>();
@@ -93,7 +94,7 @@ namespace FindnChitChat
             //app.UseHttpsRedirection();
             //seeder.SeedUsers();//Temporary Data
             app.UseCors(x=>x.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader()); //cros orgin
-            app.UseAuthentication(); 
+            app.UseAuthentication();    
             app.UseMvc();
         }
     }

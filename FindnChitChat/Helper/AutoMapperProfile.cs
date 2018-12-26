@@ -25,6 +25,7 @@ namespace FindnChitChat.Helper
                 });
                 
             CreateMap<Photo, PhotosForDetailedDto>();
+            CreateMap<UserForUpdateDto, User>();
         }
     }
 }
