@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using FindnChitChat.Model;
 using Microsoft.EntityFrameworkCore;
@@ -44,6 +45,13 @@ namespace FindnChitChat.Data
         public async Task<Photo> GetPhoto(int id)
         {
              var photo = await _context.Photos.FirstOrDefaultAsync(p => p.Id == id);
+
+            return photo;
+        }
+        public async Task<Photo> GetMainPhotoForUser(int userId)
+        {
+             var photo = await _context.Photos.Where(p => p.UserId == userId)
+                        .FirstOrDefaultAsync(p => p.IsMain);
 
             return photo;
         }
