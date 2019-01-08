@@ -25,21 +25,21 @@ namespace FindnChitChat.Controllers {
         }
 
         [HttpPost ("register")]
-        public async Task<IActionResult> Register (UserForRegisterDto userDto) {
+        public async Task<IActionResult> Register (UserForRegisterDto userForRegisterDto) {
             //validate 
 
-            userDto.UserName = userDto.UserName.ToLower ();
+            userForRegisterDto.UserName = userForRegisterDto.UserName.ToLower ();
 
-            if (await _repo.UserExists (userDto.UserName))
+            if (await _repo.UserExists (userForRegisterDto.UserName))
                 return BadRequest ("Username already exist");
 
-            var userToCreate = new User {
-                UserName = userDto.UserName
-            };
+            var userToCreate = _mapper.Map<User>(userForRegisterDto);
 
-            var creatuser = await _repo.Register (userToCreate, userDto.Password);
+            var createdUser = await _repo.Register (userToCreate, userForRegisterDto.Password);
 
-            return StatusCode (201);
+            var userToReturn = _mapper.Map<UserForDetailedDto>(createdUser);
+
+            return CreatedAtRoute("GetUser", new {controller = "Users", id = createdUser.Id}, userToReturn);
         }
 
         [HttpPost ("login")]

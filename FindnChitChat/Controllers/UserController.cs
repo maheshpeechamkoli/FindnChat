@@ -5,15 +5,19 @@ using System.Threading.Tasks;
 using AutoMapper;
 using FindnChitChat.Data;
 using FindnChitChat.Dto;
+using FindnChitChat.Helper;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
-namespace FindnChitChat.Controllers {
+namespace FindnChitChat.Controllers 
+{
 
+    [ServiceFilter(typeof(LogUserActivity))]
     [Authorize]
     [Route ("api/[controller]")]
     [ApiController]
-    public class UserController : ControllerBase {
+    public class UserController : ControllerBase 
+    {
         private readonly IFindingRepository _repo;
         private readonly IMapper _mapper;
         public UserController (IFindingRepository repo, IMapper mapper) {
@@ -30,7 +34,7 @@ namespace FindnChitChat.Controllers {
             return Ok (userToReturn);
         }
 
-        [HttpGet ("{id}")]
+        [HttpGet ("{id}", Name = "GetUser")]
         public async Task<IActionResult> GetUser (int id) {
             var user = await _repo.GetUser (id);
 
