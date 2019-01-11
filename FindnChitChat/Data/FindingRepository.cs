@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using FindnChitChat.Helper;
 using FindnChitChat.Model;
 using Microsoft.EntityFrameworkCore;
 
@@ -30,11 +31,16 @@ namespace FindnChitChat.Data
             return user;
         }
 
-        public async Task<IEnumerable<User>> GetUsers()
+        public async Task<PagedList<User>> GetUsers(UserParams userParams)
         {
-             var user = await _context.Users.Include(p => p.Photos).ToListAsync();
+            var users = _context.Users.Include(p => p.Photos).AsQueryable();
+            
+            users = users.Where(x => x.Id != userParams.UserId);
 
-            return user;
+            users = users.Where(x => x.Gender == userParams.Gender);
+
+
+            return await PagedList<User>.CreateAsync(users, userParams.PageNumber, userParams.PageSize);
         }
 
         public async Task<bool> SaveAll()
