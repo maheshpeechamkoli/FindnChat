@@ -66,14 +66,14 @@
         </li>
         <li *ngIf="loggedIn()" class="dropdown nav-item">
           <span>
-            <img src="{{photoUrl || '../../../../assets/user.png'}}" alt="Circle image" class="img-fluid rounded-circle shadow" style="width: 50px;">
+            <img src="{{photoUrl || '../../../../assets/user.png'}}" class="img-center img-fluid rounded-circle" style="width: 50px;">
           </span>
           <a href="#" class="dropdown-toggle nav-link" data-toggle="dropdown">
             <i class="fa fa-cogs d-lg-none d-xl-none"></i> Welcome {{authService.decodeToken.unique_name | titlecase}}
           </a>
           <div class="dropdown-menu dropdown-with-icons">
             <a  [routerLink]="['/member/edit']"  class="dropdown-item">
-              <i class="tim-icons icon-paper"></i> Logout
+              <i class="tim-icons icon-paper"></i> Edit Profile
             </a>
             <a  (click)="logout()" class="dropdown-item">
               <i class="tim-icons icon-bullet-list-67"></i>Logout
@@ -87,8 +87,26 @@
             <button [disabled]="!loginForm.valid" class="btn btn-success my-2 my-sm-0" type="submit">Login</button>
           </form>
         </li>
-
       </ul>
     </div>
   </div>
 </nav>
+<div *ngIf="loggedIn()" class="container section">
+    <ul class="nav nav-pills nav-pills-primary nav-pills-icons">
+        <li class="nav-item"  >
+          <a class="nav-link show" data-toggle="tab" routerLinkActive="active"   [routerLink]="['/members']" >
+            <i class="tim-icons icon-single-02"></i> Members
+          </a>
+        </li>
+        <li class="nav-item"  routerLinkActive="active">
+          <a class="nav-link" data-toggle="tab" routerLinkActive="active"  [routerLink]="['/messages']">
+            <i class="tim-icons icon-chat-33" ></i> Messages
+          </a>
+        </li>
+        <li class="nav-item"  routerLinkActive="active">
+          <a class="nav-link" data-toggle="tab" routerLinkActive="active"  [routerLink]="['/lists']">
+            <i class="tim-icons icon-settings-gear-63" ></i> Lists
+          </a>
+        </li>
+      </ul>
+</div>

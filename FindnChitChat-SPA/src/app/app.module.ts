@@ -60,7 +60,7 @@ export function tokenGetter() {
       HttpClientModule,
       FormsModule,
       ReactiveFormsModule,
-      BsDropdownModule.forRoot(),
+    //   BsDropdownModule.forRoot(),
       BsDatepickerModule.forRoot(),
       TabsModule.forRoot(),
       ButtonsModule.forRoot(),
