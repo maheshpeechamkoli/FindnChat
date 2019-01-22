@@ -34,6 +34,18 @@
 // import 'core-js/es6/weak-map';
 // import 'core-js/es6/set';
 
+import './assets/js/core/jquery.min.js';
+import './assets/js/core/popper.min.js';
+import './assets/js/core/popper.min.js';
+import './assets/js/plugins/perfect-scrollbar.jquery.min.js';
+// import './assets/js/plugins/bootstrap-switch.js';
+import './assets/js/plugins/nouislider.min.js';
+import './assets/js/plugins/chartjs.min.js';
+import './assets/js/plugins/moment.min.js';
+// import './assets/js/plugins/bootstrap-datetimepicker.js';
+import './assets/demo/demo.js';
+// import './assets/js/blk-design-system.min.js?v=1.0.0';
+
 /**
  * If the application will be indexed by Google Search, the following is required.
  * Googlebot uses a renderer based on Chrome 41.

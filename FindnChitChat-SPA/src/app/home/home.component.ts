@@ -11,7 +11,6 @@ registerMode: any ;
 loggedin: any;
 
   constructor(public authService: AuthService) {
-    console.log('hai');
     this.loggedin = this.authService.loggedIn();
 
   }

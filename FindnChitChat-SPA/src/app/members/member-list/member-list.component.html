@@ -1,23 +1,23 @@
 <div class="text-center">
-  <h3>Your matches - {{pagination.totalItems}} found</h3>
+  <h3 class="text-primary font-weight-light mb-2">Your matches - {{pagination.totalItems}} found</h3>
 </div>
 
-<div class="container mt-4" >
+<div class="container" >
 
     <form class="form-inline" #form='ngForm' (ngSubmit)="loadUsers()" novalidate>
         <div class="form-group">
           <label for="minAge" style="padding-right:8px;"><strong>Age From</strong></label>
-          <input type="number" class="form-control" style="width: 60px" id="minAge" [(ngModel)]="userParams.minAge" name="minAge">
+          <input type="number" class="form-control" style="width: 70px" id="minAge" [(ngModel)]="userParams.minAge" name="minAge">
         </div>
   
         <div class="form-group">
           <label for="maxAge" style="padding-right:8px;margin-left:10px;"><strong>Age To</strong> </label>
-          <input type="number" class="form-control" style="width: 60px" id="maxAge" [(ngModel)]="userParams.maxAge"  name="maxAge">
+          <input type="number" class="form-control" style="width: 70px" id="maxAge" [(ngModel)]="userParams.maxAge"  name="maxAge">
         </div>
   
         <div class="form-group">
           <label for="gender" style="padding-right:8px;margin-left:10px;"><strong>Show:</strong> </label>
-          <select class="form-control" style="width: 110px" id="gender" [(ngModel)]="userParams.gender" name="gender">
+          <select class="form-control" style="width: 120px" id="gender" [(ngModel)]="userParams.gender" name="gender">
             <option  *ngFor="let gender of genderList" [value]="gender.value">
               {{gender.display}}
             </option>
