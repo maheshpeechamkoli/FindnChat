@@ -95,7 +95,9 @@ namespace FindnChitChat
 
             //app.UseHttpsRedirection();
             //seeder.SeedUsers();//Temporary Data
-            app.UseCors(x=>x.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader()); //cros orgin
+            //app.UseCors(x=>x.AllowAnyOrigin().WithOrigins().AllowAnyMethod().AllowAnyHeader()); //cros orgin
+            app.UseCors(builder => builder.AllowAnyHeader().AllowAnyMethod().AllowAnyOrigin());
+            //app.UseCors(builder => builder.WithOrigins("http://localhost:5000/api/"));
             app.UseAuthentication();    
             app.UseMvc();
         }
