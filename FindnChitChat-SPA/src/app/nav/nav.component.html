@@ -53,33 +53,33 @@
           </a>
         </li>
         <li class="nav-item p-0">
-          <a class="nav-link" rel="tooltip" title="Like us on Facebook" data-placement="bottom" href="" target="_blank">
-            <i class="fab fa-facebook-square"></i>
-            <p class="d-lg-none d-xl-none">Facebook</p>
+          <a class="nav-link" rel="tooltip" title="Connect to Linkedin" data-placement="bottom" href="https://www.linkedin.com/in/maheshpeechamkoli/" target="_blank">
+            <i class="fab fa-linkedin"></i>
+            <p class="d-lg-none d-xl-none">Linkedin</p>
           </a>
         </li>
         <li class="nav-item p-0">
-          <a class="nav-link" rel="tooltip" title="Follow us on Instagram" data-placement="bottom" href="" target="_blank">
+          <a class="nav-link" rel="tooltip" title="Follow us on Instagram" data-placement="bottom" href="https://www.instagram.com/pmaheshp/?hl=en" target="_blank">
             <i class="fab fa-instagram"></i>
             <p class="d-lg-none d-xl-none">Instagram</p>
           </a>
         </li>
-        <li *ngIf="loggedIn()" class="dropdown nav-item">
-          <span>
+        <li  *ngIf="loggedIn()" class="dropdown nav-item">
+          <!-- <span>
             <img src="{{photoUrl || '../../../../assets/user.png'}}" class="img-center img-fluid rounded-circle" style="width: 50px;">
-          </span>
-          <a href="#" class="dropdown-toggle nav-link" data-toggle="dropdown">
-            <i class="fa fa-cogs d-lg-none d-xl-none"></i> Welcome {{authService.decodeToken.unique_name | titlecase}}
-          </a>
-          <div class="dropdown-menu dropdown-with-icons">
-            <a  [routerLink]="['/member/edit']"  class="dropdown-item">
-              <i class="tim-icons icon-paper"></i> Edit Profile
+          </span> -->
+            <a href="#" class="dropdown-toggle nav-link" data-toggle="dropdown" aria-expanded="false">
+              <i class="fa fa-cogs d-lg-none d-xl-none"></i> Welcome {{authService.decodeToken.unique_name | titlecase}}
             </a>
-            <a  (click)="logout()" class="dropdown-item">
-              <i class="tim-icons icon-bullet-list-67"></i>Logout
-            </a>            
-          </div>
-        </li>
+            <div class="dropdown-menu dropdown-with-icons">
+                <a  [routerLink]="['/member/edit']"  class="dropdown-item">
+                  <i class="tim-icons icon-paper"></i> Edit Profile
+                </a>
+                <a  (click)="logout()" class="dropdown-item">
+                    <i class="tim-icons icon-bullet-list-67"></i>Logout
+                  </a>               
+            </div>
+          </li>
         <li class="nav-item">
           <form *ngIf="!loggedIn()" #loginForm="ngForm"  class="form-inline my-2 my-lg-0" (ngSubmit)="login()">
             <input class="form-control mr-sm-2" type="text" placeholder="UserName" name="username" required [(ngModel)]="model.username">
@@ -110,3 +110,5 @@
         </li>
       </ul>
 </div>
+
+
