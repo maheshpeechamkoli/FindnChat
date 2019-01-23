@@ -20,6 +20,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
+using Microsoft.EntityFrameworkCore.Diagnostics;
 
 namespace FindnChitChat
 {
@@ -37,8 +38,9 @@ namespace FindnChitChat
             // services.AddDbContext<DataContext>(opt => 
             //     opt.UseInMemoryDatabase("FindnChat"));
 
-            var connection = "Data Source=FindnChat.db";
-            services.AddDbContext<DataContext>(options => options.UseSqlite(connection));
+           // var connection = "Data Source=FindnChat.db";
+            services.AddDbContext<DataContext>(options => options.UseMySql(Configuration.GetConnectionString("DefaultConnection"))
+            .ConfigureWarnings(warning => warning.Ignore(CoreEventId.IncludeIgnoredWarning)));
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1)
                     .AddJsonOptions(opt => {
                         opt.SerializerSettings.ReferenceLoopHandling = 
@@ -98,8 +100,15 @@ namespace FindnChitChat
             //app.UseCors(x=>x.AllowAnyOrigin().WithOrigins().AllowAnyMethod().AllowAnyHeader()); //cros orgin
             app.UseCors(builder => builder.AllowAnyHeader().AllowAnyMethod().AllowAnyOrigin());
             //app.UseCors(builder => builder.WithOrigins("http://localhost:5000/api/"));
-            app.UseAuthentication();    
-            app.UseMvc();
+            app.UseAuthentication();
+            app.UseDefaultFiles();
+            app.UseStaticFiles();
+            app.UseMvc(routes => {
+                routes.MapSpaFallbackRoute(
+                    name: "spa-fallback",
+                    defaults: new { controller = "Fallback", action = "Index"}
+                );
+            });
         }
     }
 }
