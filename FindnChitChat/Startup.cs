@@ -39,8 +39,10 @@ namespace FindnChitChat
             //     opt.UseInMemoryDatabase("FindnChat"));
 
            // var connection = "Data Source=FindnChat.db";
-            services.AddDbContext<DataContext>(options => options.UseMySql(Configuration.GetConnectionString("DefaultConnection"))
-            .ConfigureWarnings(warning => warning.Ignore(CoreEventId.IncludeIgnoredWarning)));
+            // services.AddDbContext<DataContext>(options => options.UseMySql(Configuration.GetConnectionString("DefaultConnection"))
+            // .ConfigureWarnings(warning => warning.Ignore(CoreEventId.IncludeIgnoredWarning)));
+            services.AddDbContext<DataContext>(options => options.UseSqlite(Configuration.GetConnectionString("DefaultConnection"))
+             .ConfigureWarnings(warning => warning.Ignore(CoreEventId.IncludeIgnoredWarning)));
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1)
                     .AddJsonOptions(opt => {
                         opt.SerializerSettings.ReferenceLoopHandling = 

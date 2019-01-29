@@ -9,15 +9,14 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace FindnChitChat.Migrations
 {
     [DbContext(typeof(DataContext))]
-    [Migration("20190123183902_mysql")]
-    partial class mysql
+    [Migration("20190129100816_InitialCreate")]
+    partial class InitialCreate
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "2.1.4-rtm-31024")
-                .HasAnnotation("Relational:MaxIdentifierLength", 64);
+                .HasAnnotation("ProductVersion", "2.1.4-rtm-31024");
 
             modelBuilder.Entity("FindnChitChat.Model.Like", b =>
                 {
