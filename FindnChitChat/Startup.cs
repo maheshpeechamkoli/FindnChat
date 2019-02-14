@@ -7,13 +7,17 @@ using System.Threading.Tasks;
 using AutoMapper;
 using FindnChitChat.Data;
 using FindnChitChat.Helper;
+using FindnChitChat.Model;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.HttpsPolicy;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Authorization;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -39,19 +43,22 @@ namespace FindnChitChat
 
             var connection = "Data Source=FindnChat.db";
             services.AddDbContext<DataContext>(options => options.UseSqlite(connection));
-            services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1)
-                    .AddJsonOptions(opt => {
-                        opt.SerializerSettings.ReferenceLoopHandling = 
-                            Newtonsoft.Json.ReferenceLoopHandling.Ignore;
-                    });
-            services.AddCors();
-            services.Configure<CloudinarySettings>(Configuration.GetSection("CloudinarySettings"));
-            services.AddAutoMapper();
-            services.AddTransient<Seed>();
-            services.AddScoped<IAuthRepository, AuthRepository>();
-            services.AddScoped<IFindingRepository, FindingRepository>();
 
-            //Validating JWT Token
+            IdentityBuilder builder = services.AddIdentityCore<User>(opt =>
+            {
+                opt.Password.RequireDigit = false;
+                opt.Password.RequiredLength = 4;
+                opt.Password.RequireNonAlphanumeric = false;
+                opt.Password.RequireUppercase = false;
+            });
+
+            builder = new IdentityBuilder(builder.UserType, typeof(Role), builder.Services);
+            builder.AddEntityFrameworkStores<DataContext>();
+            builder.AddRoleValidator<RoleValidator<Role>>();
+            builder.AddRoleManager<RoleManager<Role>>();
+            builder.AddSignInManager<SignInManager<User>>();
+
+             //validating JWT token
             services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
             .AddJwtBearer(options => {
                     options.TokenValidationParameters = new TokenValidationParameters
@@ -64,6 +71,27 @@ namespace FindnChitChat
                     };
             });
 
+            services.AddMvc(options => 
+            {
+                var policy = new AuthorizationPolicyBuilder()
+                    .RequireAuthenticatedUser()
+                    .Build();
+                options.Filters.Add(new AuthorizeFilter(policy));
+            })
+            .SetCompatibilityVersion(CompatibilityVersion.Version_2_1)
+            .AddJsonOptions(opt =>
+            {
+                opt.SerializerSettings.ReferenceLoopHandling =
+                    Newtonsoft.Json.ReferenceLoopHandling.Ignore;
+            });
+                
+            services.AddCors();
+            services.Configure<CloudinarySettings>(Configuration.GetSection("CloudinarySettings"));
+            Mapper.Reset();
+            services.AddAutoMapper();
+            services.AddTransient<Seed>();
+            services.AddScoped<IAuthRepository, AuthRepository>();
+            services.AddScoped<IFindingRepository, FindingRepository>();
             services.AddScoped<LogUserActivity>();
               
         }
@@ -94,7 +122,7 @@ namespace FindnChitChat
             }
 
             //app.UseHttpsRedirection();
-            //seeder.SeedUsers();//Temporary Data
+            seeder.SeedUsers();//Temporary Data
             //app.UseCors(x=>x.AllowAnyOrigin().WithOrigins().AllowAnyMethod().AllowAnyHeader()); //cros orgin
             app.UseCors(builder => builder.AllowAnyHeader().AllowAnyMethod().AllowAnyOrigin());
             //app.UseCors(builder => builder.WithOrigins("http://localhost:5000/api/"));
