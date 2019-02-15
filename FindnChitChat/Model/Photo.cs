@@ -12,5 +12,6 @@ namespace FindnChitChat.Model
         public string PublicId { get; set; }
         public User Users { get; set; }
         public int UserId { get; set; }
+       //public bool IsApproved { get; set; }
     }
 }

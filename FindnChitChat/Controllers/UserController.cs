@@ -14,7 +14,6 @@ namespace FindnChitChat.Controllers
 {
 
     [ServiceFilter(typeof(LogUserActivity))]
-    [Authorize]
     [Route ("api/[controller]")]
     [ApiController]
     public class UserController : ControllerBase 

@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
@@ -7,76 +8,108 @@ using AutoMapper;
 using FindnChitChat.Data;
 using FindnChitChat.Dto;
 using FindnChitChat.Model;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
 
 namespace FindnChitChat.Controllers {
+
+    [AllowAnonymous]
     [Route ("api/[controller]")]
     [ApiController]
-    public class AuthController : ControllerBase {
-        private readonly IAuthRepository _repo;
+    public class AuthController : ControllerBase 
+    {
         private readonly IConfiguration _config;
         private readonly IMapper _mapper;
-        public AuthController (IAuthRepository repo, IConfiguration config, IMapper mapper) {
+        private readonly UserManager<User> _userManager;
+        private readonly SignInManager<User> _signInManager;
+        public AuthController (IConfiguration config, IMapper mapper, 
+                                UserManager<User> userManager,SignInManager<User> signInManager) 
+        {
+            _userManager = userManager;
+            _signInManager = signInManager;
             _mapper = mapper;
-            _repo = repo;
             _config = config;
         }
 
         [HttpPost ("register")]
-        public async Task<IActionResult> Register (UserForRegisterDto userForRegisterDto) {
-            //validate 
-
-            userForRegisterDto.UserName = userForRegisterDto.UserName.ToLower ();
-
-            if (await _repo.UserExists (userForRegisterDto.UserName))
-                return BadRequest ("Username already exist");
-
+        public async Task<IActionResult> Register (UserForRegisterDto userForRegisterDto) 
+        {
             var userToCreate = _mapper.Map<User>(userForRegisterDto);
 
-            var createdUser = await _repo.Register (userToCreate, userForRegisterDto.Password);
+            var result = await _userManager.CreateAsync(userToCreate, userForRegisterDto.Password);
 
-            var userToReturn = _mapper.Map<UserForDetailedDto>(createdUser);
+            var userToReturn = _mapper.Map<UserForDetailedDto>(userToCreate);
 
-            return CreatedAtRoute("GetUser", new {controller = "Users", id = createdUser.Id}, userToReturn);
+            if (result.Succeeded)
+            {
+                return CreatedAtRoute("GetUser", 
+                    new { controller = "Users", id = userToCreate.Id }, userToReturn);
+            }
+
+            return BadRequest(result.Errors);
         }
 
         [HttpPost ("login")]
-        public async Task<IActionResult> Login (UserForLoginDto userDto) {
+        public async Task<IActionResult> Login (UserForLoginDto userDto) 
+        {
+            var user = await _userManager.FindByNameAsync(userDto.UserName);
 
-            var userFromRepo = await _repo.Login (userDto.UserName.ToLower (), userDto.Password);
+            var result = await _signInManager
+                .CheckPasswordSignInAsync(user, userDto.Password, false);
 
-            if (userFromRepo == null)
-                return Unauthorized ();
+            if (result.Succeeded)
+            {
+                var appUser = await _userManager.Users.Include(p => p.Photos)
+                    .FirstOrDefaultAsync(u => u.NormalizedUserName == userDto.UserName.ToUpper());
 
-            var claims = new [] {
-                new Claim (ClaimTypes.NameIdentifier, userFromRepo.Id.ToString ()),
-                new Claim (ClaimTypes.Name, userFromRepo.UserName)
+                var userToReturn = _mapper.Map<UserForListDto>(appUser);
+
+                return Ok(new
+                {
+                    token = GenerateJwtToken(appUser).Result,
+                    user = userToReturn
+                });
+            }
+
+            return Unauthorized();
+        }
+        private async Task<string> GenerateJwtToken(User user)
+        {
+            var claims = new List<Claim>
+            {
+                new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()),
+                new Claim(ClaimTypes.Name, user.UserName)
             };
 
-            var key = new SymmetricSecurityKey (Encoding.UTF8
-                .GetBytes (_config.GetSection ("AppSettings:Token").Value));
+            var roles = await _userManager.GetRolesAsync(user);
 
-            var creds = new SigningCredentials (key, SecurityAlgorithms.HmacSha512Signature);
+            foreach (var role in roles)
+            {
+                claims.Add(new Claim(ClaimTypes.Role, role));
+            }
 
-            var tokenDescripter = new SecurityTokenDescriptor {
-                Subject = new ClaimsIdentity (claims),
-                Expires = DateTime.Now.AddDays (1),
+            var key = new SymmetricSecurityKey(Encoding.UTF8
+                .GetBytes(_config.GetSection("AppSettings:Token").Value));
+
+            var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha512Signature);
+
+            var tokenDescriptor = new SecurityTokenDescriptor
+            {
+                Subject = new ClaimsIdentity(claims),
+                Expires = DateTime.Now.AddDays(1),
                 SigningCredentials = creds
             };
 
-            var tokenHandler = new JwtSecurityTokenHandler ();
+            var tokenHandler = new JwtSecurityTokenHandler();
 
-            var token = tokenHandler.CreateToken (tokenDescripter);
+            var token = tokenHandler.CreateToken(tokenDescriptor);
 
-            var user = _mapper.Map<UserForListDto>(userFromRepo);
-
-            return Ok (new {
-                token = tokenHandler.WriteToken (token),
-                user
-            });
-
+            return tokenHandler.WriteToken(token);
         }
+
     }
 }

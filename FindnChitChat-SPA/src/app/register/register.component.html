@@ -69,7 +69,7 @@
                       </div>
                     </div>
                     <input [ngClass]="{'is-invalid': registerForm.get('dateOfBirth').errors && registerForm.get('dateOfBirth').touched}" class="form-control datepicker"
-                    placeholder="Date of Birth" formControlName="dateOfBirth" type="test" bsDatepicker [bsConfig]="bsConfig" >
+                    placeholder="Date of Birth" formControlName="dateOfBirth" type="test" bsDatepicker [bsConfig]="bsConfig"  maxlength=10 placeholder="dd/mm/yyyy" appDateFormatter >
                   <div class="invalid-feedback" *ngIf="registerForm.get('dateOfBirth').touched && registerForm.get('dateOfBirth').hasError('required')">Date of Birth is required</div>
                             
                 </div>
@@ -145,6 +145,13 @@
                       </div>
                                  
                 </div>
+                <!-- <div class="input-group">
+                  <input class="form-control" type="text" maxlength=12 appCurrencyFormatter />
+                </div> -->
+                <!-- <div class="input-group">
+                  <input class="form-control" type="text" maxlength=10 placeholder="dd/mm/yyyy" appDateFormatter />
+                </div>
+                 -->
                 <div class="form-check text-left">
                   <label class="form-check-label">
                     <input class="form-check-input" type="checkbox">
@@ -153,6 +160,7 @@
                     <a href="javascript:void(0)">terms and conditions</a>.
                   </label>
                 </div>
+
             <div class="card-footer">
               <button  class="btn btn-round btn-info mr-2" type="submit">Get Started</button>
               <button class="btn  btn-default btn-round" type="button" (click)="cancel()">Cancel</button>

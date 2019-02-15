@@ -2,7 +2,7 @@ import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 import { HttpClientModule } from '@angular/common/http';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { BsDropdownModule, TabsModule, BsDatepickerModule, PaginationModule, ButtonsModule } from 'ngx-bootstrap';
+import { BsDropdownModule, TabsModule, BsDatepickerModule, PaginationModule, ButtonsModule, ModalModule } from 'ngx-bootstrap';
 import { RouterModule } from '@angular/router';
 import { JwtModule } from '@auth0/angular-jwt';
 import { NgxGalleryModule } from 'ngx-gallery';
@@ -32,6 +32,14 @@ import { MemberEditResolver } from './_resolvers/member-edit-resolver';
 import { PreventUnsavedChanges } from './_guards/prevent-unsaved-changes.guard';
 import { PhotoEditorComponent } from './members/photo-editor/photo-editor.component';
 import { ListsResolver } from './_resolvers/lists-resolver';
+import { MyDateFormatterDirective } from './_directives/MyDateFormatter.directive';
+import { MyCurrencyFormatterDirective } from './_directives/MyCurrencyFormatter.directive';
+import { MyCurrencyPipe } from './_pipe/my-currency.pipe';
+import { AdminPanelComponent } from './admin/admin-panel/admin-panel.component';
+import { HasRoleDirective } from './_directives/hasRole.directive';
+import { UserManagementComponent } from './admin/user-management/user-management.component';
+import { PhotoManagementComponent } from './admin/photo-management/photo-management.component';
+import { RolesModelComponent } from './admin/roles-model/roles-model.component';
 
 
 
@@ -52,7 +60,14 @@ export function tokenGetter() {
       MemberDetailComponent,
       MemberEditComponent,
       PhotoEditorComponent,
-      TimeAgoPipe
+      TimeAgoPipe,
+      MyDateFormatterDirective,
+      MyCurrencyFormatterDirective,
+      AdminPanelComponent,
+      HasRoleDirective,
+      PhotoManagementComponent,
+      UserManagementComponent,
+      RolesModelComponent
    ],
    imports: [
       BrowserModule,
@@ -65,6 +80,7 @@ export function tokenGetter() {
       TabsModule.forRoot(),
       ButtonsModule.forRoot(),
       PaginationModule.forRoot(),
+      ModalModule.forRoot(),
       RouterModule.forRoot(appRoutes),
       NgxGalleryModule,
       FileUploadModule,
@@ -86,8 +102,12 @@ export function tokenGetter() {
       MemberListResolver,
       MemberEditResolver,
       ListsResolver,
-      PreventUnsavedChanges
+      PreventUnsavedChanges,
+      MyCurrencyPipe
    ],
+   entryComponents: [
+    RolesModelComponent
+  ],
    bootstrap: [
       AppComponent
    ]

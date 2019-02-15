@@ -105,7 +105,12 @@
         </li>
         <li class="nav-item"  routerLinkActive="active">
           <a class="nav-link" data-toggle="tab" routerLinkActive="active"  [routerLink]="['/lists']">
-            <i class="tim-icons icon-settings-gear-63" ></i> Lists
+            <i class="tim-icons icon-bullet-list-67" ></i> Lists
+          </a>
+        </li>
+        <li *appHasRole="['Admin', 'Moderator']"  class="nav-item"  routerLinkActive="active">
+          <a class="nav-link" data-toggle="tab" routerLinkActive="active"  [routerLink]="['/admin']">
+            <i class="tim-icons icon-settings-gear-63" ></i> Settings
           </a>
         </li>
       </ul>
