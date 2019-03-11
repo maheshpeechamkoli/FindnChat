@@ -1,10 +1,11 @@
-import { Injectable } from '@angular/core';
+import { Injectable, Inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { BehaviorSubject } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { JwtHelperService } from '@auth0/angular-jwt';
 import { environment } from 'src/environments/environment';
 import { User } from '../_models/user';
+import { DOCUMENT } from '@angular/common';
 
 @Injectable({
   providedIn: 'root'
@@ -18,7 +19,7 @@ decodeToken: any;
 photoUrl = new BehaviorSubject<string>('../../assets/user.png');
 currentPhotoUrl = this.photoUrl.asObservable();
 
-constructor(private http: HttpClient) { }
+constructor(@Inject(DOCUMENT) private document: Document, private http: HttpClient) { }
 
 changeMemberPhoto(photoUrl: string) {
   this.photoUrl.next(photoUrl);
@@ -60,4 +61,7 @@ roleMatch(allowedRoles): boolean {
   return isMatch;
 }
 
+googlelogin() {
+  this.document.location.href = environment.apiUrl + 'google/signInWithGoogle';
+}
 }

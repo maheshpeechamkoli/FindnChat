@@ -69,6 +69,10 @@ registerForm: FormGroup;
 
   }
 
+  googlelogin() {
+    this.authSerive.googlelogin();
+  }
+
   cancel() {
     this.cancelRegister.emit(false);
   }

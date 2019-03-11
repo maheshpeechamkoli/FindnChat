@@ -8,7 +8,9 @@ using AutoMapper;
 using FindnChitChat.Data;
 using FindnChitChat.Helper;
 using FindnChitChat.Model;
+using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authentication.OAuth;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Diagnostics;
@@ -60,7 +62,38 @@ namespace FindnChitChat
             builder.AddSignInManager<SignInManager<User>>();
 
              //validating JWT token
-            services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+            // services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+            // .AddJwtBearer(options => {
+            //         options.TokenValidationParameters = new TokenValidationParameters
+            //         {
+            //             ValidateIssuerSigningKey = true,
+            //             IssuerSigningKey = new SymmetricSecurityKey(Encoding.ASCII
+            //                 .GetBytes(Configuration.GetSection("AppSettings:Token").Value)),
+            //             ValidateIssuer = false,
+            //             ValidateAudience = false                      
+            //         };
+            // });
+
+            services.AddAuthentication(options =>
+            {
+                options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+                options.DefaultSignOutScheme = IdentityConstants.ApplicationScheme;
+            })
+            .AddGoogle("Google", options =>
+            {
+                options.CallbackPath = new PathString("/google-callback");
+                options.ClientId = "1039083107001-5silt2gad2p4cfc63brg5c1impl83bko.apps.googleusercontent.com";
+                options.ClientSecret = "egDOlyRsQFYer5wbqhXDidNd";
+                options.Events = new OAuthEvents
+                {
+                    OnRemoteFailure = (RemoteFailureContext context) =>
+                    {                        
+                        context.Response.Redirect("/home/denied");
+                        context.HandleResponse();
+                        return Task.CompletedTask;
+                    }
+                };
+            })
             .AddJwtBearer(options => {
                     options.TokenValidationParameters = new TokenValidationParameters
                     {
@@ -134,8 +167,9 @@ namespace FindnChitChat
             //app.UseCors(x=>x.AllowAnyOrigin().WithOrigins().AllowAnyMethod().AllowAnyHeader()); //cros orgin
             app.UseCors(builder => builder.AllowAnyHeader().AllowAnyMethod().AllowAnyOrigin());
             //app.UseCors(builder => builder.WithOrigins("http://localhost:5000/api/"));
-            app.UseAuthentication();    
-            app.UseMvc();
+            app.UseAuthentication();   
+
+            app.UseMvcWithDefaultRoute();
         }
     }
 }
