@@ -67,7 +67,8 @@ export function tokenGetter() {
       HasRoleDirective,
       PhotoManagementComponent,
       UserManagementComponent,
-      RolesModelComponent
+      RolesModelComponent,
+      MyCurrencyPipe
    ],
    imports: [
       BrowserModule,
@@ -102,8 +103,7 @@ export function tokenGetter() {
       MemberListResolver,
       MemberEditResolver,
       ListsResolver,
-      PreventUnsavedChanges,
-      MyCurrencyPipe
+      PreventUnsavedChanges
    ],
    entryComponents: [
     RolesModelComponent
